@@ -9,26 +9,46 @@
 import React, {Fragment} from 'react';
 import {Text,
    Image,
-   ScrollView
+   ScrollView,
+   Dimensions,
+   StyleSheet,
+   FlatList
   } from "react-native";
 
+
+const largura = Dimensions.get("screen").width; //utilizando o Dimensions para deixar as imagens responsivas
+
+const informacoes = [
+  {usuario: "Raphael"},
+  {usuario: "Maiara"},
+  {usuario: "Maria"},
+]
 
 const App = () => {
   return (
     <ScrollView>
-      <Text>Raphael</Text>
-      <Image
-        source={require('./res/img/alura.jpg')}
-        style={{
-          height: 100,
-          width: 100
-        }}
+      <FlatList
+        data={informacoes}
+         renderItem={ ({item}) => 
+          <Fragment>
+            <Text>{item.usuario}</Text>
+            <Image
+              source={require('./res/img/alura.jpg')}
+              style={estilo.imagem}
+            />
+          </Fragment>}
       />
-      <Text>Maiara</Text>
-      <Image source={require('./res/img/alura.jpg')}/>
     </ScrollView>  
-    
   )
 };
+
+//Estilo
+const estilo = StyleSheet.create({
+  imagem:{
+    width: largura,
+    height: largura
+  }
+})
+
 
 export default App;

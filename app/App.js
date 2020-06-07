@@ -1,54 +1,43 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
-import React, {Fragment} from 'react';
-import {Text,
-   Image,
+import React, {Fragment, useEffect, useState} from 'react';
+import {
    ScrollView,
-   Dimensions,
-   StyleSheet,
    FlatList
-  } from "react-native";
+} from "react-native";
 
+import { Cabecalho } from './src/Components/Cabeçalho';
+import { Foto } from './src/Components/Foto';
 
-const largura = Dimensions.get("screen").width; //utilizando o Dimensions para deixar as imagens responsivas
-
-const informacoes = [
-  {usuario: "Raphael"},
-  {usuario: "Maiara"},
-  {usuario: "Maria"},
-]
 
 const App = () => {
+  
+  const [fotos, setFotos] = useState([]);
+
+  useEffect(()=> {
+
+    const lerFotos = async() => {
+        const fotosHTTP = await fetch("http://localhost:3030/feed");
+        const fotosJson = await fotosHTTP.json();
+        setFotos(fotosJson);
+    }
+
+    lerFotos();
+  },[]);
+  
+  
+  
   return (
     <ScrollView>
       <FlatList
-        data={informacoes}
+        data={fotos}
+        keyExtractor={(item) => item.id.toString()}
          renderItem={ ({item}) => 
           <Fragment>
-            <Text>{item.usuario}</Text>
-            <Image
-              source={require('./res/img/alura.jpg')}
-              style={estilo.imagem}
-            />
+            <Cabecalho nomeUsuario={item.userName}/>
+            <Foto/>
           </Fragment>}
       />
     </ScrollView>  
   )
 };
-
-//Estilo
-const estilo = StyleSheet.create({
-  imagem:{
-    width: largura,
-    height: largura
-  }
-})
-
 
 export default App;

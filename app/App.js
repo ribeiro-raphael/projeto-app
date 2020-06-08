@@ -6,6 +6,8 @@ import {
 
 import { Cabecalho } from './src/Components/Cabeçalho';
 import { Foto } from './src/Components/Foto';
+import lerFotos from './src/Components/api/Feed';
+import {Comentarios} from './src/Components/Comentarios'
 
 
 const App = () => {
@@ -14,13 +16,8 @@ const App = () => {
 
   useEffect(()=> {
 
-    const lerFotos = async() => {
-        const fotosHTTP = await fetch("http://localhost:3030/feed");
-        const fotosJson = await fotosHTTP.json();
-        setFotos(fotosJson);
-    }
-
-    lerFotos();
+    lerFotos(setFotos);
+  
   },[]);
   
   
@@ -32,8 +29,16 @@ const App = () => {
         keyExtractor={(item) => item.id.toString()}
          renderItem={ ({item}) => 
           <Fragment>
-            <Cabecalho nomeUsuario={item.userName}/>
-            <Foto/>
+            <Cabecalho 
+            nomeUsuario={item.userName}
+            urlImage={item.userURL}
+            />
+            <Foto 
+              urlFoto={item.url}
+              descricao={item.description} //descricao da foto
+              qtdLikes={item.likes}
+            />
+            <Comentarios comentarios={item.comentarios}/>
           </Fragment>}
       />
     </ScrollView>  
